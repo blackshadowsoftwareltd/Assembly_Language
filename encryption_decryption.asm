@@ -39,12 +39,13 @@ call decrypt
 
 encrypt:
 lea bx, table1
-lea si, encrypted
+lea si, input_string
 call parse
 
 ; show result:
 DISPLAY_MSG  msg_enc
-DISPLAY_MSG  encrypted
+DISPLAY_MSG  input_string
+NEW_LINE
 
 decrypt:
 lea bx, table2
@@ -54,6 +55,7 @@ call parse
 ; show result:
 DISPLAY_MSG msg_dec
 DISPLAY_MSG decrypted
+NEW_LINE
 
 ; wait for any key...
 mov ah, 0
