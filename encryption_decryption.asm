@@ -1,14 +1,17 @@
+display_string macro message
+    local msg_start
+    mov dx, offset message    ; Load address of the message
+    mov ah, 09h               ; DOS function: print string
+    int 21h                   ; Call DOS interrupt
+endm
 
 name "crypt"
-
 org 100h
-
 
 jmp start
 
-; string has '$' in the end:
-string1 db 'hello world!', 0Dh,0Ah, '$'; 'abcdefghijklmnopqrstvuwxyz'
-
+encrypted db 'hello world!', 0Dh,0Ah, '$' 
+decrypted db  'axpps gsupn!', 0Dh,0Ah, '$' 
 table1 db 97 dup (' '), 'klmnxyzabcopqrstvuwdefghij'
 
 table2 db 97 dup (' '), 'hijtuvwxyzabcdklmnoprqsefg'
@@ -16,34 +19,25 @@ table2 db 97 dup (' '), 'hijtuvwxyzabcdklmnoprqsefg'
 
 start: ; encrypt:
 lea bx, table1
-lea si, string1
+lea si, encrypted
 call parse
 
 ; show result:
-lea dx, string1 ; output of a string at ds:dx
-mov ah, 09
-int 21h 
+display_string  encrypted
 
 ; decrypt:
 lea bx, table2
-lea si, string1
+lea si, decrypted
 call parse
 
 ; show result:
-lea dx, string1
-; output of a string at ds:dx
-mov ah, 09
-int 21h
+display_string decrypted
 
 ; wait for any key...
 mov ah, 0
 int 16h
 
-
 ret   ; exit to operating system.
-
-
-
 
 ; subroutine to encrypt/decrypt
 ; parameters: 
